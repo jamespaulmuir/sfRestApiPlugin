@@ -59,7 +59,6 @@ EOF;
   // create a route
     $model = $arguments['model'];
     $name = strtolower(preg_replace(array('/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'), '\\1_\\2', $model));
-    
 
     $routing = sfConfig::get('sf_app_config_dir').'/routing.yml';
     $content = file_get_contents($routing);
@@ -71,7 +70,7 @@ EOF;
         $databaseManager = new sfDatabaseManager($this->configuration);
 
         $route = Doctrine::getTable($model)->getOption('route');
-        $column = $this->getIdentifier($route);
+        $column = $this->getIdentifier($model);
         $regexp = $this->getRegexForIdentifier($route);
 
       $module = $arguments['module'] ? $arguments['module'] : $name;
@@ -116,10 +115,11 @@ EOF
     }
 
 
-    protected function getIdentifier($route)
+    protected function getIdentifier($model)
     {
-        if(isset($route['column'])){
-            return $route['column'];
+        $id_column = Doctrine::getTable($model)->getIdentifier();
+        if($id_column != null){
+            return $id_column;
         }
         return 'id';
     }
