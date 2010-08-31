@@ -1,0 +1,6 @@
+generator:
+  class: sfRestGenerator
+  param:
+    model_class: ##MODEL_CLASS##
+    theme: api
+##CONFIG##
